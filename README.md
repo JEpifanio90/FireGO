@@ -1,7 +1,7 @@
 # FireGO 🔥
 
 [![Release](https://img.shields.io/github/release/jepifanio90/firego.svg?style=flat-square)](https://github.com/jepifanio90/firego/releases)
-
+[![Build Status](https://github.com/JEpifanio90/FireGO/actions/workflows/bot.yml/badge.svg?branch=main)](https://github.com/JEpifanio90/FireGO/actions/workflows/bot.yml)
 > Rest API made with GO, Gin and GORM
 
 ## Show your support

@@ -1,4 +1,4 @@
-name: FireGO Check
+name: Build Status
 
 on:
   push:
