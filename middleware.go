@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"google.golang.org/api/option"
 	"log"
+	"net/http"
 	"strings"
 )
 
@@ -15,30 +16,36 @@ const fireTokenID = "FIREBASE_ID_TOKEN"
 func AuthMiddleware() gin.HandlerFunc {
 	cli := setup()
 
-	return func(c *gin.Context) {
-		authHeader := c.Request.Header.Get("Authorization")
-		token := strings.Replace(authHeader, "Bearer ", "", 1)
-		idToken, err := cli.VerifyIDToken(context.Background(), token)
-		if err != nil {
-			log.Println("FUUUUUCK")
-			log.Fatalln(err.Error())
-			//if fam.unAuthorized != nil {
-			//	fam.unAuthorized(c)
-			//} else {
-			//	c.JSON(http.StatusUnauthorized, gin.H{
-			//		"status":  http.StatusUnauthorized,
-			//		"message": http.StatusText(http.StatusUnauthorized),
-			//	})
-			//}
+	return func(ctx *gin.Context) {
+		authHeader := ctx.Request.Header.Get("Authorization")
+		if authHeader == "" {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"status": http.StatusBadRequest, "message": "Missing Authorization header"})
+
 			return
 		}
-		c.Set(fireTokenID, idToken)
-		c.Next()
+
+		token := strings.Replace(authHeader, "Bearer ", "", 1)
+
+		if token == "" {
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": http.StatusUnauthorized, "message": "Missing token"})
+
+			return
+		}
+
+		idToken, err := cli.VerifyIDToken(context.Background(), token)
+		if err != nil {
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, err)
+
+			return
+		}
+
+		ctx.Set("Authorization", idToken)
+		ctx.Next()
 	}
 }
 
-func ExtractClaims(c *gin.Context) *auth.Token {
-	idToken, ok := c.Get(fireTokenID)
+func ExtractClaims(ctx *gin.Context) *auth.Token {
+	idToken, ok := ctx.Get(fireTokenID)
 	if !ok {
 		return new(auth.Token)
 	}
