@@ -2,6 +2,7 @@
 
 [![Release](https://img.shields.io/github/release/jepifanio90/firego.svg?style=flat-square)](https://github.com/jepifanio90/firego/releases)
 [![FireGO Check](https://github.com/JEpifanio90/FireGO/actions/workflows/bot.yml/badge.svg?branch=main)](https://github.com/JEpifanio90/FireGO/actions/workflows/bot.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/JEpifanio90/FireGO)](https://goreportcard.com/report/github.com/JEpifanio90/FireGO)
 
 Gin Middleware That Authorizes Any Given Bearer Token With Firebase SDK
 
